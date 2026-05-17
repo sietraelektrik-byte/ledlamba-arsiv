@@ -31,6 +31,14 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/
-          git diff-index --quiet HEAD || git commit -m "🤖 Otomatik Ürün Listesi Güncellendi [Skip GitHub Actions]"
-          git push origin main
+          
+          # Sadece docs klasörünü zorla ekle, diğer çer çöpü görmezden gel
+          git add -f docs/
+          
+          # Eğer docs klasöründe bir değişiklik varsa commit et ve gönder
+          if [ -n "$(git status --porcelain docs/)" ]; then
+            git commit -m "🤖 Otomatik Ürün Listesi Güncellendi [Skip GitHub Actions]"
+            git push origin main
+          else
+            echo "Herhangi bir ürün güncellemesi bulunamadı, repo temiz."
+          fi
