@@ -1,0 +1,12 @@
+name: Arşiv Dağıtım
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install -g firebase-tools
+      - run: firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --only hosting
